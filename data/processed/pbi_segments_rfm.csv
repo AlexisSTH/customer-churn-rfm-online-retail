@@ -1,0 +1,11 @@
+segment_rfm,n_clients,ca_total,ca_moyen,recency_moy,frequency_moy,churn_rate
+Besoin d'Attention,373,260953.46,699.61,155.38,2.17,0.56
+Champions,1161,6970760.26,6004.1,32.86,12.7,0.13
+En danger,422,665631.99,1577.33,302.17,4.56,0.65
+Fidèles,390,1117785.14,2866.12,148.75,7.17,0.34
+Nouveaux Clients,54,17032.52,315.42,16.94,1.0,0.56
+Perdus,670,235358.58,351.28,412.61,1.13,0.84
+Potentiellement Fidèles,495,387328.22,782.48,42.47,2.19,0.43
+Prometteurs,239,76624.07,320.6,117.51,1.0,0.7
+Sur le point de Partir,471,328388.27,697.22,228.28,1.99,0.6
+en Hibernation,243,79727.53,328.1,228.38,1.0,0.75
