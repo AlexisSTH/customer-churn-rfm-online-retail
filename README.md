@@ -112,7 +112,6 @@ Le choix d'une approche SQL pour la préparation des données reproduit l'archit
 │   ├── 02_feature_engineering.ipynb
 │   ├── 03_rfm_segmentation.ipynb
 │   └── 04_modeling.ipynb
-├── models/                  # Modèle entraîné (.pkl)
 ├── reports/                 # Visuels et captures du dashboard
 └── README.md
 ```
@@ -123,8 +122,7 @@ Le choix d'une approche SQL pour la préparation des données reproduit l'archit
 
 ```bash
 # 1. Cloner le repo
-git clone https://github.com/<ton-username>/<ton-repo>.git
-cd <ton-repo>
+git clone https://github.com/AlexisSTH/customer-churn-rfm-online-retail.git
 
 # 2. Installer les dépendances
 pip install -r requirements.txt
