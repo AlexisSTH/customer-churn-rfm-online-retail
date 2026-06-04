@@ -1,8 +1,6 @@
 # Prédiction de Churn & Segmentation RFM — Retailer E-commerce
 
-> Identifier les clients qui risquent de ne plus revenir, et comprendre pourquoi — à partir de 1 million de transactions réelles d'un retailer en ligne britannique.
-
-**Statut : projet en cours** — les étapes d'analyse et de modélisation sont terminées, le dashboard Power BI est en construction.
+> Identifier les clients qui risquent de ne plus revenir, comprendre pourquoi, et savoir lesquels contacter en priorité — à partir d'un million de transactions réelles d'un retailer en ligne britannique.
 
 ---
 
@@ -10,17 +8,17 @@
 
 Quand un client e-commerce arrête d'acheter, l'entreprise le découvre souvent trop tard. L'idée de ce projet est simple : **anticiper** ce départ pour pouvoir agir avant qu'il ne soit définitif.
 
-Je suis parti d'un cas concret — la base de transactions d'un retailer en ligne — et je l'ai traitée comme si c'était une vraie mission client : comprendre les données, segmenter les clients, construire un modèle de prédiction, et préparer un dashboard exploitable par une équipe marketing.
+Je suis parti d'un cas concret — la base de transactions d'un retailer en ligne — et je l'ai traitée comme une vraie mission client : comprendre les données, segmenter les clients, construire un modèle de prédiction, et livrer un dashboard exploitable par une équipe marketing.
 
 Le projet répond à deux questions complémentaires :
 - **Qui sont mes clients ?** (segmentation)
-- **Lesquels vont probablement partir ?** (prédiction)
+- **Lesquels vont probablement partir, et que faire ?** (prédiction + action)
 
 ---
 
 ## Le dataset
 
-**Online Retail II** (UCI Machine Learning Repository) — un retailer en ligne britannique spécialisé dans les articles cadeaux, avec une clientèle majoritairement composée de petites boutiques qui recommandent régulièrement.
+**Online Retail II** (UCI Machine Learning Repository) — un retailer en ligne britannique spécialisé dans les articles cadeaux, avec une clientèle composée en grande partie de petites boutiques qui recommandent régulièrement.
 
 | | |
 |---|---|
@@ -28,22 +26,21 @@ Le projet répond à deux questions complémentaires :
 | Transactions | ~1 067 000 |
 | Clients identifiés | 5 942 |
 | Marché retenu | Royaume-Uni (92% des transactions) |
+| Cohorte finale | 4 518 clients |
 
-Pourquoi ce dataset : contrairement à beaucoup de jeux de données e-commerce où les clients n'achètent qu'une seule fois, celui-ci présente **75% de clients multi-acheteurs**. C'est essentiel pour parler de fidélité et de churn de façon crédible.
-
-> Petite anecdote méthodologique : j'avais d'abord commencé ce projet sur un autre dataset (Olist), avant de réaliser que 97% de ses clients n'avaient commandé qu'une fois — ce qui rendait toute analyse de churn bancale. J'ai préféré changer de dataset plutôt que de forcer une méthode inadaptée. Savoir reconnaître qu'un jeu de données ne permet pas de répondre à la question fait partie du travail.
+> **Note méthodologique :** j'avais d'abord commencé ce projet sur un autre dataset (Olist), avant de réaliser que 97% de ses clients n'avaient commandé qu'une seule fois — ce qui rendait toute analyse de churn bancale. J'ai préféré changer de dataset plutôt que de forcer une méthode inadaptée. Savoir reconnaître qu'un jeu de données ne permet pas de répondre à la question fait partie du travail.
 
 ---
 
 ## La démarche
 
 ### 1. Exploration & qualité des données
-Chargement des transactions, audit qualité (valeurs manquantes, annulations, prix négatifs), analyse de la saisonnalité et de la fréquence d'achat. Un point de validation explicite a confirmé que le dataset se prêtait bien à une analyse RFM avant d'aller plus loin.
+Chargement des transactions, audit qualité (valeurs manquantes, annulations, prix négatifs), analyse de la saisonnalité et de la fréquence d'achat. Un point de validation explicite a confirmé que le dataset se prêtait bien à une analyse RFM (75% de clients multi-acheteurs) avant d'aller plus loin.
 
 ### 2. Feature engineering
-Transformation de 725 000 lignes de transactions en un tableau d'une ligne par client, avec une cible « churn » construite par **découpage temporel** (les features sont calculées avant une date de référence, le churn est observé après — pour éviter toute fuite d'information du futur).
+Transformation de 725 000 lignes de transactions en un tableau d'une ligne par client, avec une cible « churn » construite par **découpage temporel** : les features sont calculées avant une date de référence, le churn est observé après — pour éviter toute fuite d'information du futur.
 
-Quatre familles de variables ont été construites :
+Quatre familles de variables :
 - **RFM classique** : récence, fréquence, montant
 - **Comportement d'achat** : panier moyen, régularité, diversité produit
 - **Comportement temporel** : ancienneté, intervalle entre commandes
@@ -57,16 +54,14 @@ Deux approches complémentaires :
 ### 4. Modélisation prédictive
 Comparaison de trois modèles (Logistic Regression, Random Forest, XGBoost), validation croisée, analyse des variables les plus prédictives, et calibrage du seuil de décision selon des considérations business.
 
-### 5. Dashboard Power BI *(en cours)*
-Restitution interactive : vue globale, segments, et liste des clients à risque scorés.
+### 5. Dashboard Power BI
+Restitution interactive en trois pages : vue globale (KPIs), segmentation (RFM + clusters), et clients à risque (scoring individuel + liste actionnable).
 
 ---
 
 ## Ce que les données ont révélé
 
-Quelques résultats que je trouve parlants :
-
-**La récence prime sur tout le reste.** Le facteur le plus prédictif du churn n'est pas combien un client a dépensé, mais depuis combien de temps il n'a pas commandé — un poids plus de deux fois supérieur à celui de la fréquence. Un gros client silencieux depuis 6 mois est plus à risque qu'un petit client actif.
+**La récence prime sur tout le reste.** Le facteur le plus prédictif du churn n'est pas combien un client a dépensé, mais depuis combien de temps il n'a pas commandé — un poids plus de deux fois supérieur à celui de la fréquence. Un gros client silencieux depuis six mois est plus à risque qu'un petit client actif.
 
 **Une poignée de clients pèse énormément.** 22 clients (0,5% de la base) représentent à eux seuls une part disproportionnée du chiffre d'affaires. Une stratégie de rétention ne peut pas traiter tout le monde de la même façon.
 
@@ -80,6 +75,18 @@ Quelques résultats que je trouve parlants :
 
 ---
 
+## Le dashboard
+
+Le dashboard Power BI se compose de trois pages, pensées comme un entonnoir décisionnel :
+
+1. **Vue globale** — la santé de la base client en un coup d'œil (KPIs, répartition des segments, taux de churn).
+2. **Segmentation** — qui sont les clients (cartographie RFM, profils des clusters, churn par groupe).
+3. **Clients à risque** — qui contacter en priorité (scoring individuel, croisement risque/valeur, liste actionnable triée par probabilité de churn).
+
+*(Captures d'écran dans le dossier `reports/`)*
+
+---
+
 ## Stack technique
 
 | Usage | Outil |
@@ -87,9 +94,9 @@ Quelques résultats que je trouve parlants :
 | Extraction & feature engineering | SQL (DuckDB) |
 | Analyse & modélisation | Python (pandas, scikit-learn, XGBoost) |
 | Visualisation | Matplotlib, Seaborn |
-| Dashboard | Power BI *(en cours)* |
+| Dashboard | Power BI |
 
-Le choix d'une approche SQL pour la préparation des données n'est pas anodin : il reproduit l'architecture qu'on retrouve en entreprise (un entrepôt de données qu'on interroge, puis une analyse en Python), et il passe à l'échelle bien mieux que de tout charger en mémoire.
+Le choix d'une approche SQL pour la préparation des données reproduit l'architecture qu'on retrouve en entreprise (un entrepôt de données qu'on interroge, puis une analyse en Python), et passe à l'échelle bien mieux que de tout charger en mémoire.
 
 ---
 
@@ -106,7 +113,7 @@ Le choix d'une approche SQL pour la préparation des données n'est pas anodin :
 │   ├── 03_rfm_segmentation.ipynb
 │   └── 04_modeling.ipynb
 ├── models/                  # Modèle entraîné (.pkl)
-├── reports/                 # Visuels et exports
+├── reports/                 # Visuels et captures du dashboard
 └── README.md
 ```
 
@@ -127,6 +134,7 @@ pip install -r requirements.txt
 # Placer le CSV dans data/raw/
 
 # 4. Lancer les notebooks dans l'ordre (01 → 04)
+# 5. Ouvrir le dashboard Power BI dans reports/
 ```
 
 ---
@@ -135,6 +143,6 @@ pip install -r requirements.txt
 
 Projet réalisé par **Alexis Sayasith**, data analyst freelance spécialisé e-commerce.
 
-Je documente la construction de ce projet étape par étape sur LinkedIn — n'hésitez pas à y suivre les coulisses, les choix méthodologiques et les résultats.
+J'ai documenté la construction de ce projet étape par étape sur LinkedIn — les choix méthodologiques, les pivots et les résultats.
 
 *Disponible pour des missions autour de l'analyse client, du churn et de la segmentation.*
